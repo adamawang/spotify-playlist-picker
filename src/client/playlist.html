@@ -1,0 +1,24 @@
+<div ng-controller='SearchController'>
+hi
+
+<div>
+  <p>
+    {{ data.user.displayName }}
+  </p>
+  <img src='{{ data.user.photos[0] }}' />
+</div>
+
+<button ng-click='findPlaylist()'>Find me a playlist!</button>
+<br />
+<button ng-click='pickAnother()'>Pick another!</button>
+<div>
+  <p>
+    {{ data.playlist.name }}
+  </p>
+  <img src='{{ data.playlist.images[0].url }}'  />
+  <p>
+    <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'>Open on Spotify</a>
+  </p>
+</div>
+
+</div>

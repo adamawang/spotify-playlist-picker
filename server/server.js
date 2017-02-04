@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const request = require('request');
 
 const app = express();
 
@@ -14,7 +15,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 
 // serve static files
-app.use(express.static(path.join(__dirname, '../src')));
+app.use(express.static(path.join(__dirname, '../src/')));
+app.use(express.static(path.join(__dirname, '../src/client')));
 app.use(express.static(path.join(__dirname, '../node_modules')));
 
 
@@ -24,21 +26,46 @@ const spotifyStrategy = require('./passport.js');
 passport.use('spotify', spotifyStrategy);
 
 
-// routes
-app.get('/auth/spotify', passport.authenticate('spotify'), (req, res) => {
-  // nothing
+// auth routes
+app.get('/auth/spotify', passport.authenticate('spotify',  {scope: ['playlist-read-private'] }), (req, res) => {
+  // nothing happens here
 });
 
+
+let authToken;
+let currentProfile;
+
 app.get('/auth/spotify/callback', (req, res, next) => {
-  passport.authenticate('spotify', (err, info) => {
+  passport.authenticate('spotify', (err, token, profile) => {
     if (err) {
       console.log('Error with spotify login');
     } else {
-      console.log('we are good! passed auth');
-      
+      authToken = token;
+      currentProfile = profile;
+      res.redirect('/#/playlist');
     }
   })(req, res, next);
 });
+
+app.get('/api/playlist', (req, res) => {
+  request({
+    method: 'GET',
+    url: 'https://api.spotify.com/v1/me/playlists',
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  }, (err, response, body) => {
+      if (err) {
+        console.log('Spotify API error: ', err);
+      }
+      res.send(body);
+    })
+});
+
+app.get('/api/userinfo', (req, res) => {
+  res.send(currentProfile);
+})
+
 
 // set port
 const port = process.env.PORT || 5000;

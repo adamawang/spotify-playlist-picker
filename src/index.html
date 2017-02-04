@@ -2,11 +2,18 @@
 <html>
 <head>
   <title>Find a playlist</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
-<body>
-  <h1>Find a spotify playlist!</h1>
-  <h5>please authenticate first, on the button below</h5>
+<body ng-app='spotify'>
+  <div align='center'>
+    <h1>Find a spotify playlist!</h1>
+  </div>
+  <div ng-view></div>
 
-  <a href='/auth/spotify'><button>Spotify Auth</button></a>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
+
+  <script src="client/router.js"></script>
+  <script src="client/playlist.js"></script>
 </body>
 </html>
