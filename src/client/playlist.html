@@ -5,12 +5,12 @@ hi
   <p>
     {{ data.user.displayName }}
   </p>
-  <img src='{{ data.user.photos[0] }}' />
+  <img class='profile' src='{{ data.user.photos[0] }}' />
 </div>
 
-<button ng-click='findPlaylist()'>Find me a playlist!</button>
+<button ng-hide='!showButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
 <br />
-<button ng-click='pickAnother()'>Pick another!</button>
+<button ng-hide='showButton()' ng-click='pickAnother()'>Pick another!</button>
 <div>
   <p>
     {{ data.playlist.name }}
