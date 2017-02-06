@@ -27,7 +27,7 @@ passport.use('spotify', spotifyStrategy);
 
 
 // auth routes
-app.get('/auth/spotify', passport.authenticate('spotify',  {scope: ['playlist-read-private'] }), (req, res) => {
+app.get('/auth/spotify', passport.authenticate('spotify',  {scope: ['playlist-read-private', 'user-library-read'] }), (req, res) => {
   // nothing happens here
 });
 
@@ -55,17 +55,31 @@ app.get('/api/playlist', (req, res) => {
       authorization: `Bearer ${authToken}`,
     }
   }, (err, response, body) => {
-      if (err) {
-        console.log('Spotify API error: ', err);
-      }
-      res.send(body);
-    })
+    if (err) {
+      console.log('Spotify Playlist API error: ', err);
+    }
+    res.send(body);
+  })
 });
+
+app.get('/api/savedtracks', (req, res) => {
+  request({
+    method: 'GET',
+    url: 'https://api.spotify.com/v1/me/tracks',
+    headers: {
+      authorization: `Bearer ${authToken}`,
+    }
+  }, (err, response, body) => {
+    if (err) {
+      console.log('Spotify Tracks API error: ', err);
+    }
+    res.send(body);
+  })
+})
 
 app.get('/api/userinfo', (req, res) => {
   res.send(currentProfile);
-})
-
+});
 
 // set port
 const port = process.env.PORT || 5000;

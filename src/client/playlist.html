@@ -1,23 +1,39 @@
 <div ng-controller='SearchController'>
 
-<div class='page-header'>
+<div class='page-header header'>
   <p>
     {{ 'Hello, ' + data.user.displayName }}
   </p>
   <img class='profile' src='{{ data.user.photos[0] }}' />
 </div>
 
-<button class='btn btn-warning'ng-hide='!showButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
+<button class='btn btn-warning'ng-hide='!showPlaylistButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
+<button class='btn btn-warning'ng-hide='!showSongsButton()' ng-click='findSong()'>Find me a song!</button>
 <br />
-<button class='btn btn-warning'ng-hide='showButton()' ng-click='pickAnother()'>Pick another!</button>
+<button class='btn btn-warning'ng-hide='showPlaylistButton()' ng-click='pickAnother()'>Pick another playlist!</button>
+<button class='btn btn-warning'ng-hide='showSongsButton()' ng-click='pickAnotherSong()'>Pick another song!</button>
 <div>
-  <h2>
-    {{ 'Let\'s listen to... ' + data.playlist.name }}
-  </h2>
-  <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
-  <div ng-hide='showButton()'>
-    <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
-  </div>
+  <span>
+    <h2>
+      <div>
+        {{ 'Let\'s listen to... ' + data.playlist.name }}
+      </div>
+    </h2>
+    <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
+    <div ng-hide='showPlaylistButton()'>
+      <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
+    </div>
+  </span>
+  <span>
+    <div>
+      {{ 'Let\'s listen to... ' + data.songs.track.name + ' by ' + data.songs.track.artists[0].name }}
+    </div>
+    <img class='songart' src='{{ data.songs.track.album.images[0].url }}'  />
+    <div ng-hide='showSongsButton()'>
+      <a href='{{ data.songs.track.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Song on Spotify</button></a>
+    </div>
+  </span>
 </div>
+
 
 </div>

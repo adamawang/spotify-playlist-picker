@@ -3,12 +3,20 @@ body {
   text-align: center;
 }
 
+body.header {
+  background-color: #fffff0;
+}
+
 img.profile {
   height: 100px;
   position: relative;
 }
 
 img.playlistart {
+  height: 300px;
+}
+
+img.songart {
   height: 300px;
 }
 

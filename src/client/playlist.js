@@ -2,10 +2,18 @@ angular.module('Playlist', [])
 
 .factory('Search', ($http) => {
 
-  const search = () => {
+  const playlistSearch = () => {
     return $http({
       method: 'GET',
       url: '/api/playlist'
+    })
+    .then(response => response);
+  }
+
+  const songSearch = () => {
+    return $http({
+      method: 'GET',
+      url: '/api/savedtracks'
     })
     .then(response => response);
   }
@@ -19,20 +27,24 @@ angular.module('Playlist', [])
   }
 
   return {
-    search,
+    playlistSearch,
+    songSearch,
     userInfo,
   }
 })
 
-.controller('SearchController', function($scope, Search) {
+.controller('SearchController', function($scope, $location, Search) {
   $scope.data = {};
   // save playlist data here
   let playlists;
+  let songs;
+  let userData;
 
-  $scope.showButton = () => playlists === undefined;
+  $scope.showPlaylistButton = () => playlists === undefined;
+  $scope.showSongsButton = () => songs === undefined;
 
   $scope.findPlaylist = () => {
-    Search.search()
+    Search.playlistSearch()
     .then((response) => {
       playlists = response.data.items;
       const randomNum = Math.floor(Math.random() * playlists.length);
@@ -40,17 +52,34 @@ angular.module('Playlist', [])
     });
   };
 
+  $scope.findSong = () => {
+    Search.songSearch()
+    .then((response) => {
+      songs = response.data.items;
+      console.log('songs: ', songs);
+      const randomNum = Math.floor(Math.random() * songs.length);
+      $scope.data.songs = songs[randomNum];
+    });
+  };
+
   $scope.pickAnother = () => {
     const nextRandom = Math.floor(Math.random() * playlists.length);
-    console.log(playlists[nextRandom])
     $scope.data.playlist = playlists[nextRandom];
   };
+
+  $scope.pickAnotherSong = () => {
+    const nextRandom = Math.floor(Math.random() * songs.length);
+    $scope.data.songs = songs[nextRandom];
+  }
 
   $scope.showUserData = () => {
     Search.userInfo()
     .then((response) => {
-      const userData = response.data
+      userData = response.data
       $scope.data.user = userData;
+      if(!userData){
+        $location.path('/');
+      }
     });
   };
 
