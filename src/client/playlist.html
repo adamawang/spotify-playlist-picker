@@ -1,9 +1,8 @@
 <div ng-controller='SearchController'>
-hi
 
-<div>
+<div class='page-header'>
   <p>
-    {{ data.user.displayName }}
+    {{ 'Hello, ' + data.user.displayName }}
   </p>
   <img class='profile' src='{{ data.user.photos[0] }}' />
 </div>
@@ -12,10 +11,10 @@ hi
 <br />
 <button ng-hide='showButton()' ng-click='pickAnother()'>Pick another!</button>
 <div>
-  <p>
+  <h2>
     {{ data.playlist.name }}
-  </p>
-  <img src='{{ data.playlist.images[0].url }}'  />
+  </h2>
+  <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
   <p>
     <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'>Open on Spotify</a>
   </p>
