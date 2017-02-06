@@ -5,8 +5,13 @@ body {
 
 img.profile {
   height: 100px;
+  position: relative;
 }
 
 img.playlistart {
   height: 300px;
+}
+
+button.spotifyopen {
+  margin-top: 5px;
 }

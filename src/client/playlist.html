@@ -7,17 +7,17 @@
   <img class='profile' src='{{ data.user.photos[0] }}' />
 </div>
 
-<button ng-hide='!showButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
+<button class='btn btn-warning'ng-hide='!showButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
 <br />
-<button ng-hide='showButton()' ng-click='pickAnother()'>Pick another!</button>
+<button class='btn btn-warning'ng-hide='showButton()' ng-click='pickAnother()'>Pick another!</button>
 <div>
   <h2>
-    {{ data.playlist.name }}
+    {{ 'Let\'s listen to... ' + data.playlist.name }}
   </h2>
   <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
-  <p>
-    <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'>Open on Spotify</a>
-  </p>
+  <div ng-hide='showButton()'>
+    <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
+  </div>
 </div>
 
 </div>
