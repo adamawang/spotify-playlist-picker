@@ -56,7 +56,6 @@ angular.module('Playlist', [])
     Search.songSearch()
     .then((response) => {
       songs = response.data.items;
-      console.log('songs: ', songs);
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
     });
@@ -77,6 +76,7 @@ angular.module('Playlist', [])
     .then((response) => {
       userData = response.data
       $scope.data.user = userData;
+      console.log('user data: ', userData)
       if(!userData){
         $location.path('/');
       }
