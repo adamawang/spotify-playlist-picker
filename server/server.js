@@ -41,16 +41,13 @@ app.get('/auth/spotify', passport.authenticate('spotify',  {
 });
 
 
-let authToken;
-let currentProfile;
-
 app.get('/auth/spotify/callback', (req, res, next) => {
   passport.authenticate('spotify', (err, token, profile) => {
     if (err) {
       console.log('Error with spotify login');
     } else {
-      authToken = token;
-      currentProfile = profile;
+      // authToken = token;
+      // currentProfile = profile;
       // TODO don't save token and profile details here, create API call to retrieve user data from spotify
       // Save user info in the front
       res.redirect(`/#/key/${token}`);
@@ -59,11 +56,12 @@ app.get('/auth/spotify/callback', (req, res, next) => {
 });
 
 app.get('/api/playlist', (req, res) => {
+  const authToken = req.headers.authorization;
   request({
     method: 'GET',
-    url: 'https://api.spotify.com/v1/me/playlists',
+    url: 'https://api.spotify.com/v1/me/playlists?limit=50',
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: authToken,
     }
   }, (err, response, body) => {
     if (err) {
@@ -74,11 +72,12 @@ app.get('/api/playlist', (req, res) => {
 });
 
 app.get('/api/savedtracks', (req, res) => {
+  const authToken = req.headers.authorization;
   request({
     method: 'GET',
-    url: 'https://api.spotify.com/v1/me/tracks',
+    url: 'https://api.spotify.com/v1/me/tracks?limit=50',
     headers: {
-      authorization: `Bearer ${authToken}`,
+      authorization: authToken,
     }
   }, (err, response, body) => {
     if (err) {
@@ -89,7 +88,19 @@ app.get('/api/savedtracks', (req, res) => {
 })
 
 app.get('/api/userinfo', (req, res) => {
-  res.send(currentProfile);
+  const authToken = req.headers.authorization;
+  request({
+    method: 'GET',
+    url: 'https://api.spotify.com/v1/me',
+    headers: {
+      authorization: authToken,
+    }
+  }, (err, response, body) => {
+    if (err) {
+      console.log('Spotify Tracks API error: ', err);
+    }
+    res.send(body);
+  })
 });
 
 // set port

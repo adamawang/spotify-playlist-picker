@@ -2,26 +2,35 @@ angular.module('Playlist', [])
 
 .factory('Search', ($http) => {
 
-  const playlistSearch = () => {
+  const playlistSearch = (key) => {
     return $http({
       method: 'GET',
-      url: '/api/playlist'
+      url: '/api/playlist',
+      headers: {
+        authorization: `Bearer ${key}`,
+      }
     })
     .then(response => response);
   }
 
-  const songSearch = () => {
+  const songSearch = (key) => {
     return $http({
       method: 'GET',
-      url: '/api/savedtracks'
+      url: '/api/savedtracks',
+      headers: {
+        authorization: `Bearer ${key}`,
+      }
     })
     .then(response => response);
   }
 
-  const userInfo = () => {
+  const userInfo = (key) => {
     return $http({
       method: 'GET',
-      url: '/api/userinfo'
+      url: '/api/userinfo',
+      headers: {
+        authorization: `Bearer ${key}`,
+      }
     })
     .then(response => response);
   }
@@ -33,7 +42,7 @@ angular.module('Playlist', [])
   }
 })
 
-.controller('SearchController', function($scope, $location, Search) {
+.controller('SearchController', function($scope, $location, $window, Search) {
   $scope.data = {};
   // save playlist data here
   let playlists;
@@ -44,7 +53,8 @@ angular.module('Playlist', [])
   $scope.showSongsButton = () => songs === undefined;
 
   $scope.findPlaylist = () => {
-    Search.playlistSearch()
+    const key = $window.localStorage.getItem('key');
+    Search.playlistSearch(key)
     .then((response) => {
       playlists = response.data.items;
       const randomNum = Math.floor(Math.random() * playlists.length);
@@ -53,8 +63,10 @@ angular.module('Playlist', [])
   };
 
   $scope.findSong = () => {
-    Search.songSearch()
+    const key = $window.localStorage.getItem('key');
+    Search.songSearch(key)
     .then((response) => {
+      console.log('response from songs search: ', response);
       songs = response.data.items;
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
@@ -72,7 +84,8 @@ angular.module('Playlist', [])
   }
 
   $scope.showUserData = () => {
-    Search.userInfo()
+    const key = $window.localStorage.getItem('key');
+    Search.userInfo(key)
     .then((response) => {
       userData = response.data
       $scope.data.user = userData;
