@@ -27,7 +27,16 @@ passport.use('spotify', spotifyStrategy);
 
 
 // auth routes
-app.get('/auth/spotify', passport.authenticate('spotify',  {scope: ['playlist-read-private', 'user-library-read'] }), (req, res) => {
+app.get('/auth/spotify', passport.authenticate('spotify',  {
+  // request scopes for spotify API access, access key granted will have these permissions
+  scope: [
+    'playlist-read-private',
+    'user-library-read',
+    'user-read-private',
+    'user-read-email',
+    'user-read-birthdate'
+  ]
+}), (req, res) => {
   // nothing happens here
 });
 
@@ -42,6 +51,8 @@ app.get('/auth/spotify/callback', (req, res, next) => {
     } else {
       authToken = token;
       currentProfile = profile;
+      // TODO don't save token and profile details here, create API call to retrieve user data from spotify
+      // Save user info in the front
       res.redirect(`/#/key/${token}`);
     }
   })(req, res, next);
