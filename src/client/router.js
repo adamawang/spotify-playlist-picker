@@ -12,5 +12,9 @@ angular.module('spotify', [
     templateUrl: './playlist.html',
     controller: 'SearchController',
   })
+  .when('/key/:key', {
+    templateUrl: './key.html',
+    controller: 'AuthController',
+  })
   .otherwise({ redirectTo: '/' });
 })

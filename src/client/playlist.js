@@ -85,3 +85,12 @@ angular.module('Playlist', [])
 
   $scope.showUserData();
 })
+
+.controller('AuthController', function($scope, $location, $window) {
+  $scope.setKey = () => {
+    var key = $location.url().slice(5);
+    $window.localStorage.setItem('key', key);
+    $location.path('/playlist')
+  }
+  $scope.setKey();
+})

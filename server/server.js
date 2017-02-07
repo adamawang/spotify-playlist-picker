@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -41,7 +42,7 @@ app.get('/auth/spotify/callback', (req, res, next) => {
     } else {
       authToken = token;
       currentProfile = profile;
-      res.redirect('/#/playlist');
+      res.redirect(`/#/key/${token}`);
     }
   })(req, res, next);
 });
