@@ -53,6 +53,7 @@ angular.module('Playlist', [])
   $scope.showSongsButton = () => songs === undefined;
 
   $scope.trustSrc = function(src) {
+    // for angular to trust the url without yelling at us for XSS
     return $sce.trustAsResourceUrl(src);
   };
 
@@ -74,7 +75,6 @@ angular.module('Playlist', [])
       songs = response.data.items;
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
-      console.log('response from songs search: ', $scope.data.songs);
       $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}`;
     });
   };
@@ -97,7 +97,6 @@ angular.module('Playlist', [])
     .then((response) => {
       userData = response.data
       $scope.data.user = userData;
-      console.log('user data: ', userData)
       if(!userData){
         $location.path('/');
       }
