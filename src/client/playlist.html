@@ -1,6 +1,6 @@
 <div ng-controller='SearchController'>
 
-<div class='page-header header'>
+<div class='page-header'>
   <p>
     {{ 'Hello, ' + data.user.display_name }}
   </p>
@@ -13,35 +13,37 @@
 <button class='btn btn-warning'ng-hide='!showPlaylistButton()' ng-click='findPlaylist()'>Find me a playlist!</button>
 <button class='btn btn-warning'ng-hide='!showSongsButton()' ng-click='findSong()'>Find me a song!</button>
 <br />
-<div class='row'>
-  <div class='col-md-6'>
-    <button class='btn btn-warning'ng-hide='showPlaylistButton()' ng-click='pickAnother()'>Pick another playlist!</button>
-    <h2>
+<div class='container'>
+  <div class='row'>
+    <div class='col-md-6'>
+      <button class='btn btn-warning'ng-hide='showPlaylistButton()' ng-click='pickAnother()'>Pick another playlist!</button>
+      <h4>
+        <div ng-hide='showPlaylistButton()'>
+          {{ 'Let\'s listen to... ' + data.playlist.name }}
+        </div>
+      </h4>
+      <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
       <div ng-hide='showPlaylistButton()'>
-        {{ 'Let\'s listen to... ' + data.playlist.name }}
+        <div>
+          <iframe src="{{ trustSrc(data.widget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+        </div>
+        <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
       </div>
-    </h2>
-    <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
-    <div ng-hide='showPlaylistButton()'>
-      <div>
-        <iframe src="{{ trustSrc(data.widget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
-      </div>
-      <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
     </div>
-  </div>
-  <div class='col-md-6'>
-    <button class='btn btn-warning'ng-hide='showSongsButton()' ng-click='pickAnotherSong()'>Pick another song!</button>
-    <h2>
+    <div class='col-md-6'>
+      <button class='btn btn-warning'ng-hide='showSongsButton()' ng-click='pickAnotherSong()'>Pick another song!</button>
+      <h4>
+        <div ng-hide='showSongsButton()'>
+          {{ 'Let\'s listen to... ' + data.songs.track.name + ', by ' + data.songs.track.artists[0].name }}
+        </div>
+      </h4>
+      <img class='playlistart' src='{{ data.songs.track.album.images[0].url }}' />
       <div ng-hide='showSongsButton()'>
-        {{ 'Let\'s listen to... ' + data.songs.track.name + ', by ' + data.songs.track.artists[0].name }}
+        <div>
+          <iframe src="{{ trustSrc(data.songwidget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+        </div>
+        <a href='{{ data.songs.track.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Song on Spotify</button></a>
       </div>
-    </h2>
-    <img class='playlistart' src='{{ data.songs.track.album.images[0].url }}' />
-    <div ng-hide='showSongsButton()'>
-      <div>
-        <iframe src="{{ trustSrc(data.songwidget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
-      </div>
-      <a href='{{ data.songs.track.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Song on Spotify</button></a>
     </div>
   </div>
 </div>
