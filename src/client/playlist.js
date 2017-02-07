@@ -42,7 +42,7 @@ angular.module('Playlist', [])
   }
 })
 
-.controller('SearchController', function($scope, $location, $window, Search) {
+.controller('SearchController', function($scope, $location, $window, $sce, Search) {
   $scope.data = {};
   // save playlist data here
   let playlists;
@@ -52,6 +52,10 @@ angular.module('Playlist', [])
   $scope.showPlaylistButton = () => playlists === undefined;
   $scope.showSongsButton = () => songs === undefined;
 
+  $scope.trustSrc = function(src) {
+    return $sce.trustAsResourceUrl(src);
+  };
+
   $scope.findPlaylist = () => {
     const key = $window.localStorage.getItem('key');
     Search.playlistSearch(key)
@@ -59,6 +63,7 @@ angular.module('Playlist', [])
       playlists = response.data.items;
       const randomNum = Math.floor(Math.random() * playlists.length);
       $scope.data.playlist = playlists[randomNum];
+      $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[randomNum].uri}`;
     });
   };
 
@@ -66,21 +71,24 @@ angular.module('Playlist', [])
     const key = $window.localStorage.getItem('key');
     Search.songSearch(key)
     .then((response) => {
-      console.log('response from songs search: ', response);
       songs = response.data.items;
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
+      console.log('response from songs search: ', $scope.data.songs);
+      $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}`;
     });
   };
 
   $scope.pickAnother = () => {
     const nextRandom = Math.floor(Math.random() * playlists.length);
     $scope.data.playlist = playlists[nextRandom];
+    $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[nextRandom].uri}`;
   };
 
   $scope.pickAnotherSong = () => {
     const nextRandom = Math.floor(Math.random() * songs.length);
     $scope.data.songs = songs[nextRandom];
+    $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[nextRandom].track.uri}`;
   }
 
   $scope.showUserData = () => {

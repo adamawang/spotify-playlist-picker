@@ -24,6 +24,7 @@
     </h2>
     <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
     <div ng-hide='showPlaylistButton()'>
+      <iframe src="{{ trustSrc(data.widget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
       <a href='{{ data.playlist.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Spotify Playlist</button></a>
     </div>
   </div>
@@ -33,6 +34,7 @@
     </div>
     <img class='playlistart' src='{{ data.songs.track.album.images[0].url }}'  />
     <div ng-hide='showSongsButton()'>
+      <iframe src="{{ trustSrc(data.songwidget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
       <a href='{{ data.songs.track.external_urls.spotify }}' target='_blank'><button class='btn spotifyopen'>Open Song on Spotify</button></a>
     </div>
   </div>
