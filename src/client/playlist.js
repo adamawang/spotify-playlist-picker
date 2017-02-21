@@ -63,7 +63,7 @@ angular.module('Playlist', ['ngMaterial'])
     Search.playlistSearch(key)
     .then((response) => {
       playlists = response.data.items;
-      const randomNum = Math.floor(Math.random() * playlists.length);
+      const randomNum = Math.floor(Math.random() * playlists.length) + 1;
       $scope.data.playlist = playlists[randomNum];
       $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[randomNum].uri}&theme=white`;
     })
@@ -74,20 +74,20 @@ angular.module('Playlist', ['ngMaterial'])
     Search.songSearch(key)
     .then((response) => {
       songs = response.data.items;
-      const randomNum = Math.floor(Math.random() * songs.length);
+      const randomNum = Math.floor(Math.random() * songs.length) + 1;
       $scope.data.songs = songs[randomNum];
       $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}&theme=white`;
     })
   }
 
   $scope.pickAnother = () => {
-    const nextRandom = Math.floor(Math.random() * playlists.length);
+    const nextRandom = Math.floor(Math.random() * playlists.length) + 1;
     $scope.data.playlist = playlists[nextRandom];
     $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[nextRandom].uri}&theme=white`;
   }
 
   $scope.pickAnotherSong = () => {
-    const nextRandom = Math.floor(Math.random() * songs.length);
+    const nextRandom = Math.floor(Math.random() * songs.length) + 1;
     $scope.data.songs = songs[nextRandom];
     $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[nextRandom].track.uri}&theme=white`;
   }
