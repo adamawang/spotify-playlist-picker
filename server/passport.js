@@ -10,3 +10,7 @@ module.exports = new SpotifyStrategy({
     done(null, accessToken, profile);
   }
 );
+
+
+// https://spotify-playlist-picker.herokuapp.com/auth/spotify/callback
+// http://localhost:5000/auth/spotify/callback
