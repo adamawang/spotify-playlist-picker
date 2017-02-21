@@ -4,9 +4,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const request = require('request');
+const logger = require('morgan');
 
 const app = express();
 
+app.use(logger('dev'));
 app.use(bodyParser.urlencoded({
   extended: true,
 }));

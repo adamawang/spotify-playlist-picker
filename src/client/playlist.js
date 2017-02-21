@@ -1,4 +1,4 @@
-angular.module('Playlist', [])
+angular.module('Playlist', ['ngMaterial'])
 
 .factory('Search', ($http) => {
 
@@ -51,11 +51,12 @@ angular.module('Playlist', [])
 
   $scope.showPlaylistButton = () => playlists === undefined;
   $scope.showSongsButton = () => songs === undefined;
+  $scope.isLoggedIn = () => !!$window.localStorage.getItem('key');
 
   $scope.trustSrc = function(src) {
     // for angular to trust the url without yelling at us for XSS
     return $sce.trustAsResourceUrl(src);
-  };
+  }
 
   $scope.findPlaylist = () => {
     const key = $window.localStorage.getItem('key');
@@ -65,8 +66,8 @@ angular.module('Playlist', [])
       const randomNum = Math.floor(Math.random() * playlists.length);
       $scope.data.playlist = playlists[randomNum];
       $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[randomNum].uri}&theme=white`;
-    });
-  };
+    })
+  }
 
   $scope.findSong = () => {
     const key = $window.localStorage.getItem('key');
@@ -76,14 +77,14 @@ angular.module('Playlist', [])
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
       $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}&theme=white`;
-    });
-  };
+    })
+  }
 
   $scope.pickAnother = () => {
     const nextRandom = Math.floor(Math.random() * playlists.length);
     $scope.data.playlist = playlists[nextRandom];
     $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[nextRandom].uri}&theme=white`;
-  };
+  }
 
   $scope.pickAnotherSong = () => {
     const nextRandom = Math.floor(Math.random() * songs.length);
@@ -100,9 +101,21 @@ angular.module('Playlist', [])
       if(!userData){
         $location.path('/');
       }
-    });
-  };
+    })
+  }
 
+  $scope.logOut = () => {
+    $window.localStorage.removeItem('key');
+    $location.path('/')
+  }
+
+  $scope.authCheck = () => {
+    if(!$scope.isLoggedIn()){
+      $location.path('/')
+    }
+  }
+
+  $scope.authCheck();
   $scope.showUserData();
 })
 
