@@ -48,6 +48,19 @@ angular.module('Playlist', ['ngMaterial'])
   let playlists;
   let songs;
   let userData;
+  const noPLData = {
+    name: "You don't have any saved playlists! Open Spotify and follow or like a playlist first."
+  }
+  const noSongData = {
+    track: {
+      name: "You don't have any saved songs!",
+      artists: [
+        0: {
+          name: "Open Spotify and add some songs first."
+        }
+      ]
+    }
+  }
 
   $scope.showPlaylistButton = () => playlists === undefined;
   $scope.showSongsButton = () => songs === undefined;
@@ -63,6 +76,10 @@ angular.module('Playlist', ['ngMaterial'])
     Search.playlistSearch(key)
     .then((response) => {
       playlists = response.data.items;
+      if (playlists.length < 1) {
+        $scope.data.playlist = noPLData;
+        return;
+      }
       const randomNum = Math.floor(Math.random() * playlists.length);
       $scope.data.playlist = playlists[randomNum];
       $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[randomNum].uri}&theme=white`;
@@ -74,8 +91,14 @@ angular.module('Playlist', ['ngMaterial'])
     Search.songSearch(key)
     .then((response) => {
       songs = response.data.items;
+      if (songs.length < 1) {
+        $scope.data.songs = noSongData;
+        return;
+      }
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
+      console.log(songs[randomNum]);
+
       $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}&theme=white`;
     })
   }

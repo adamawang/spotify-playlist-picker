@@ -46,7 +46,7 @@
       <md-button class='md-raised md-warn'ng-hide='showSongsButton()' ng-click='pickAnotherSong()'>Pick another song!</md-button>
       <h4>
         <div ng-hide='showSongsButton()'>
-          {{ 'Let\'s listen to... ' + data.songs.track.name + ', by ' + data.songs.track.artists[0].name }}
+          {{ 'Let\'s listen to... ' + data.songs.track.name + ' - ' + data.songs.track.artists[0].name }}
         </div>
       </h4>
       <img class='playlistart' src='{{ data.songs.track.album.images[0].url }}' />
