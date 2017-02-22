@@ -2,6 +2,10 @@ angular.module('Playlist', ['ngMaterial'])
 
 .factory('Search', ($http) => {
 
+  // for all api calls, include an 'authorization' header
+  // with the word "Bearer" prepended to the key
+  // Spotify auth requires it.
+
   const playlistSearch = (key) => {
     return $http({
       method: 'GET',
@@ -67,7 +71,9 @@ angular.module('Playlist', ['ngMaterial'])
   $scope.isLoggedIn = () => !!$window.localStorage.getItem('key');
 
   $scope.trustSrc = function(src) {
+
     // for angular to trust the url without yelling at us for XSS
+
     return $sce.trustAsResourceUrl(src);
   }
 
@@ -97,8 +103,6 @@ angular.module('Playlist', ['ngMaterial'])
       }
       const randomNum = Math.floor(Math.random() * songs.length);
       $scope.data.songs = songs[randomNum];
-      console.log(songs[randomNum]);
-
       $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}&theme=white`;
     })
   }
