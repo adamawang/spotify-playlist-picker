@@ -55,7 +55,7 @@ angular.module('Playlist', ['ngMaterial'])
     track: {
       name: "You don't have any saved songs!",
       artists: [
-        0: {
+        {
           name: "Open Spotify and add some songs first."
         }
       ]
