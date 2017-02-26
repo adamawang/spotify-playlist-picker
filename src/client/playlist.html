@@ -5,9 +5,9 @@
 
 <div class='jumbotron'>
   <p class='userheader'>
-    {{ 'Hey, ' + data.user.display_name + '!' }}
+    {{ 'Hey, ' + data.userName + '!' }}
   </p>
-  <img class='profile' src='{{ data.user.images[0].url }}' />
+  <img class='profile' src='{{ data.userImage }}' />
   <div>
     <a href='{{ data.user.external_urls.spotify }}' target='_blank'><md-button class='md-raised'><i class="fa fa-spotify fa-1x" aria-hidden="true"></i>  Open Your Spotify Profile</md-button></a>
   </div>
@@ -31,7 +31,7 @@
           {{ 'Let\'s listen to... ' + data.playlist.name }}
         </div>
       </h4>
-      <img class='playlistart' src='{{ data.playlist.images[0].url }}'  />
+      <img class='playlistart' src='{{ data.playlistArt }}'  />
       <div ng-hide='showPlaylistButton()'>
         <div>
           <iframe src="{{ trustSrc(data.widget) }}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
