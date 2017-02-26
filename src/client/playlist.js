@@ -48,10 +48,17 @@ angular.module('Playlist', ['ngMaterial'])
 
 .controller('SearchController', function($scope, $location, $window, $sce, Search) {
   $scope.data = {};
-  // save playlist data here
-  let playlists;
-  let songs;
-  let userData;
+  let playlists;        // save playlist data here
+  let songs;            // save song data here
+  let userData;         // save user data response here
+  let userName;         // if display name is null, set username to id
+  let userImage;        // if image array is empty, set to default image
+  let playlistArt;      // if playlist images array is empty, set to default
+
+  const defaultUserImage = "../image/icon_user.png"
+  const defaultPlaylistImage = "../image/default_cover.png"
+
+  // cases where user does not have playlists saved, or songs saved
   const noPLData = {
     name: "You don't have any saved playlists! Open Spotify and follow or like a playlist first."
   }
@@ -70,25 +77,34 @@ angular.module('Playlist', ['ngMaterial'])
   $scope.showSongsButton = () => songs === undefined;
   $scope.isLoggedIn = () => !!$window.localStorage.getItem('key');
 
+
   $scope.trustSrc = function(src) {
-
-    // for angular to trust the url without yelling at us for XSS
-
-    return $sce.trustAsResourceUrl(src);
+    return $sce.trustAsResourceUrl(src);    // for angular to trust the url without yelling at us for XSS
   }
 
   $scope.findPlaylist = () => {
     const key = $window.localStorage.getItem('key');
     Search.playlistSearch(key)
     .then((response) => {
+      console.log('plist response: ', response);
       playlists = response.data.items;
+
+      // if user has no saved playlists, return default values
       if (playlists.length < 1) {
         $scope.data.playlist = noPLData;
+        $scope.data.widget = `https://embed.spotify.com/?uri=spotify:user:spotify:playlist:3xgbBiNc7mh3erYsCl8Fwg&theme=white`;
+        $scope.data.playlist.images[0].url = "https://u.scdn.co/images/pl/default/109b80c1fa65b42ec86e6cf030be0f4cf24a6d46";
         return;
       }
+
       const randomNum = Math.floor(Math.random() * playlists.length);
-      $scope.data.playlist = playlists[randomNum];
-      $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[randomNum].uri}&theme=white`;
+      const randomPlaylist = playlists[randomNum];
+
+      playlistArt = randomPlaylist.images.length ? randomPlaylist.images[0].url : defaultPlaylistImage;
+
+      $scope.data.playlist = randomPlaylist;
+      $scope.data.playlistArt = playlistArt;
+      $scope.data.widget = `https://embed.spotify.com/?uri=${randomPlaylist.uri}&theme=white`;      // pass uri to widget
     })
   }
 
@@ -97,26 +113,38 @@ angular.module('Playlist', ['ngMaterial'])
     Search.songSearch(key)
     .then((response) => {
       songs = response.data.items;
+
+      // if user has no saved songs, return default values
       if (songs.length < 1) {
         $scope.data.songs = noSongData;
         return;
       }
+
       const randomNum = Math.floor(Math.random() * songs.length);
-      $scope.data.songs = songs[randomNum];
-      $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[randomNum].track.uri}&theme=white`;
+      const randomSong = songs[randomNum];
+
+      $scope.data.songs = randomSong;
+      $scope.data.songwidget = `https://embed.spotify.com/?uri=${randomSong.track.uri}&theme=white`;
     })
   }
 
   $scope.pickAnother = () => {
     const nextRandom = Math.floor(Math.random() * playlists.length);
-    $scope.data.playlist = playlists[nextRandom];
-    $scope.data.widget = `https://embed.spotify.com/?uri=${playlists[nextRandom].uri}&theme=white`;
+    const nextRandomPlaylist = playlists[nextRandom];
+
+    playlistArt = nextRandomPlaylist.images.length ? nextRandomPlaylist.images[0].url : defaultPlaylistImage;
+
+    $scope.data.playlist = nextRandomPlaylist;
+    $scope.data.playlistArt = playlistArt;
+    $scope.data.widget = `https://embed.spotify.com/?uri=${nextRandomPlaylist.uri}&theme=white`;
   }
 
   $scope.pickAnotherSong = () => {
     const nextRandom = Math.floor(Math.random() * songs.length);
-    $scope.data.songs = songs[nextRandom];
-    $scope.data.songwidget = `https://embed.spotify.com/?uri=${songs[nextRandom].track.uri}&theme=white`;
+    const nextRandomSong = songs[nextRandom];
+
+    $scope.data.songs = nextRandomSong;
+    $scope.data.songwidget = `https://embed.spotify.com/?uri=${nextRandomSong.track.uri}&theme=white`;
   }
 
   $scope.showUserData = () => {
@@ -124,7 +152,15 @@ angular.module('Playlist', ['ngMaterial'])
     Search.userInfo(key)
     .then((response) => {
       userData = response.data
+
+      userName = userData.display_name ? userData.display_name : userData.id;           // if display name is null, set username to id
+      userImage = userData.images.length ? userData.images[0].url : defaultUserImage;   // if user images array is empty, set image to default
+
       $scope.data.user = userData;
+      $scope.data.userName = userName;
+      $scope.data.userImage = userImage;
+
+      // simple auth check
       if(!userData){
         $location.path('/');
       }
@@ -142,7 +178,7 @@ angular.module('Playlist', ['ngMaterial'])
     }
   }
 
-  $scope.authCheck();
+  $scope.authCheck();       // on controller load, run functions
   $scope.showUserData();
 })
 
@@ -152,5 +188,6 @@ angular.module('Playlist', ['ngMaterial'])
     $window.localStorage.setItem('key', key);
     $location.path('/playlist')
   }
-  $scope.setKey();
+
+  $scope.setKey();    // on controller load, save key that is encoded in URL into localStorage
 })
