@@ -17,7 +17,8 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 
 // serve static files
-app.use(express.static(path.join(__dirname, '../src/')));
+app.use(express.static(path.join(__dirname, '../src')));
+app.use(express.static(path.join(__dirname, '../src/image')));
 app.use(express.static(path.join(__dirname, '../src/client')));
 app.use(express.static(path.join(__dirname, '../node_modules')));
 
